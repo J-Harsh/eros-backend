@@ -7,6 +7,7 @@ import commentRoutes from "./routes/comment.js";
 import authRoutes from "./routes/auth.js";
 import cookieParser from "cookie-parser";
 import cors from 'cors'
+import path from 'path';
 
 const app = express();
 
@@ -43,7 +44,15 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(8800, () => {
+app.use(express.static(path.join(__dirname,'./client/build')))
+
+app.get('*',(req,res)=>{
+  res.sendFile(path.join(__dirname,'./client/build/index.html'))
+})
+
+const PORT=8800 || process.env.PORT;
+
+app.listen(PORT, () => {
   connect();
   console.log("Connection done")
 });
